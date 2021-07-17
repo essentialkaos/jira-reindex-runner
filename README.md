@@ -14,7 +14,7 @@
 
 `jira-reindex-runner` is an app for periodical running Jira re-index process.
 
-Due to the lack of Jira functionality, it is impossible to check if a re-index is required or not. For using this app, you must have ScriptRunner add-on installed on your Jira instance. Then you have to create a new REST endpoint in ScriptRunner with the following code:
+Due to [the lack](https://jira.atlassian.com/browse/JRASERVER-70793) of Jira functionality, it is impossible to check if a re-index is required or not. For using this app, you must have [ScriptRunner add-on](https://marketplace.atlassian.com/apps/6820/scriptrunner-for-jira) installed on your Jira instance. Then you have to create a new REST endpoint in ScriptRunner with the following code:
 
 ```groovy
 import com.onresolve.scriptrunner.runner.rest.common.CustomEndpointDelegate
