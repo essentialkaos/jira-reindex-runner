@@ -1,0 +1,2 @@
+# JiraReindexRunner task
+30 1 * * * root /usr/bin/jira-reindex-runner -c /etc/jira-reindex-runner.knf &> /var/log/jira-reindex-runner/errors.log
