@@ -1,0 +1,34 @@
+# This is configuration file for jira-reindex-runner
+
+[main]
+
+  # Main enable/disable switch
+  enabled: false
+
+[jira]
+
+  # Jira URL
+  url: https://jira.domain.com
+
+  # Jira user name
+  username: 
+
+  # Jira user password
+  password: 
+
+  # Re-index type (FOREGROUND / BACKGROUND / BACKGROUND_PREFERRED)
+  reindex-type: BACKGROUND_PREFERRED
+
+[log]
+
+  # Log file dir
+  dir: /var/log/jira-reindex-runner
+
+  # Path to log file
+  file: {log:dir}/jira-reindex-runner.log
+
+  # Log permissions
+  perms: 644
+
+  # Default log level (debug/info/warn/error/crit)
+  level: info
