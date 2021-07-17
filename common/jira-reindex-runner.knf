@@ -1,5 +1,10 @@
 # This is configuration file for jira-reindex-runner
 
+[main]
+
+  # Main enable/disable switch
+  enabled: false
+
 [jira]
 
   # Jira URL

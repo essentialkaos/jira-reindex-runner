@@ -114,13 +114,23 @@ func checkIfReindexRequired() (bool, error) {
 
 // checkReindexProgress checks if re-index already in progress
 func checkReindexProgress() (bool, error) {
-	statusCode, err := sendRequest(JIRA_ENDPOINT_PROGRESS, req.GET, nil, nil)
-	return statusCode == 200, err
+	i := &ReindexProgressInfo{}
+	statusCode, err := sendRequest(JIRA_ENDPOINT_PROGRESS, req.GET, nil, i)
+
+	if statusCode != 200 {
+		return false, err
+	}
+
+	return i.IsFinished == false, err
 }
 
 // startReindex starts and monitors re-index process
 func startReindex() error {
-	query := req.Query{"type": knf.GetS(JIRA_REINDEX_TYPE, "BACKGROUND_PREFERRED")}
+	reindexType := knf.GetS(JIRA_REINDEX_TYPE, "BACKGROUND_PREFERRED")
+
+	log.Info("Starting re-index (type: %s)…", reindexType)
+
+	query := req.Query{"type": reindexType}
 	statusCode, err := sendRequest(JIRA_ENDPOINT_REINDEX, req.POST, query, nil)
 
 	if err != nil {
@@ -183,7 +193,7 @@ func getCurrentReindexProgress() (*ReindexProgressInfo, error) {
 func sendRequest(endpoint, method string, query req.Query, result interface{}) (int, error) {
 	r := req.Request{
 		Method: method,
-		URL:    knf.GetS("JIRA_URL") + endpoint,
+		URL:    knf.GetS(JIRA_URL) + endpoint,
 
 		BasicAuthUsername: knf.GetS(JIRA_USERNAME),
 		BasicAuthPassword: knf.GetS(JIRA_PASSWORD),

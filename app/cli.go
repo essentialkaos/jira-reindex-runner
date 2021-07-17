@@ -10,6 +10,7 @@ package app
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"strings"
 
 	"pkg.re/essentialkaos/ek.v12/fmtc"
@@ -53,6 +54,7 @@ const (
 
 // Configuration file properties
 const (
+	MAIN_ENABLED      = "main:enabled"
 	JIRA_URL          = "jira:url"
 	JIRA_USERNAME     = "jira:username"
 	JIRA_PASSWORD     = "jira:password"
@@ -83,6 +85,8 @@ var useRawOutput = false
 
 // Init is main function
 func Init() {
+	runtime.GOMAXPROCS(1)
+
 	_, errs := options.Parse(optMap)
 
 	if len(errs) != 0 {
@@ -116,6 +120,10 @@ func Init() {
 	loadConfig()
 	validateConfig()
 	setupLogger()
+
+	if knf.GetB(MAIN_ENABLED, false) {
+		os.Exit(0)
+	}
 
 	log.Aux(strings.Repeat("-", 80))
 	log.Aux("%s %s starting…", APP, VER)
