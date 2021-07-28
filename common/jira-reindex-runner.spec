@@ -52,8 +52,8 @@
 
 Summary:         Application for periodical running Jira re-index process
 Name:            jira-reindex-runner
-Version:         0.0.1
-Release:         1%{?dist}
+Version:         0.0.2
+Release:         0%{?dist}
 Group:           Applications/System
 License:         Apache License, Version 2.0
 URL:             https://github.com/essentialkaos/jira-reindex-runner
@@ -161,6 +161,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Wed Jul 28 2021 Anton Novojilov <andy@essentialkaos.com> - 0.0.2-0
+- Fixed bug with handling main enable switch in configuration file
+
 * Wed Jul 28 2021 Anton Novojilov <andy@essentialkaos.com> - 0.0.1-1
 - Fixed permissions for configuration file
 
