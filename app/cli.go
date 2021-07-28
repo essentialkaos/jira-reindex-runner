@@ -35,7 +35,7 @@ import (
 // Basic application info
 const (
 	APP  = "JiraReindexRunner"
-	VER  = "0.0.1"
+	VER  = "0.0.2"
 	DESC = "Application for periodical running Jira re-index process"
 )
 
@@ -121,7 +121,7 @@ func Init() {
 	validateConfig()
 	setupLogger()
 
-	if knf.GetB(MAIN_ENABLED, false) {
+	if !knf.GetB(MAIN_ENABLED, false) {
 		os.Exit(0)
 	}
 
