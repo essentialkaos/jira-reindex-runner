@@ -53,7 +53,7 @@
 Summary:         Application for periodical running Jira re-index process
 Name:            jira-reindex-runner
 Version:         0.0.1
-Release:         0%{?dist}
+Release:         1%{?dist}
 Group:           Applications/System
 License:         Apache License, Version 2.0
 URL:             https://github.com/essentialkaos/jira-reindex-runner
@@ -101,7 +101,7 @@ install -dm 755 %{buildroot}%{_mandir}/man1
 install -pm 755 %{srcdir}/%{name} \
                 %{buildroot}%{_bindir}/
 
-install -pm 644 %{srcdir}/common/%{name}.knf \
+install -pm 600 %{srcdir}/common/%{name}.knf \
                 %{buildroot}%{_sysconfdir}/
 
 install -pm 644 %{srcdir}/common/%{name}.logrotate \
@@ -161,5 +161,8 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Wed Jul 28 2021 Anton Novojilov <andy@essentialkaos.com> - 0.0.1-1
+- Fixed permissions for configuration file
+
 * Sat Jul 17 2021 Anton Novojilov <andy@essentialkaos.com> - 0.0.1-0
 - Initial build for kaos-repo
