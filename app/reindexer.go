@@ -159,6 +159,8 @@ func startReindex() error {
 			continue
 		}
 
+		lastSuccess = time.Now()
+
 		if i.IsFinished {
 			break
 		}
