@@ -35,7 +35,7 @@ import (
 // Basic application info
 const (
 	APP  = "JiraReindexRunner"
-	VER  = "0.0.2"
+	VER  = "0.0.3"
 	DESC = "Application for periodical running Jira re-index process"
 )
 
