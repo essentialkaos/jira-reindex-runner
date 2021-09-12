@@ -46,7 +46,7 @@ Using this endpoint, our app can check if re-index is required and run it.
 
 #### From source
 
-To build the `jira-reindex-runner` from scratch, make sure you have a working Go 1.15+ workspace (_[instructions](https://golang.org/doc/install)_), then:
+To build the `jira-reindex-runner` from scratch, make sure you have a working Go 1.16+ workspace (_[instructions](https://golang.org/doc/install)_), then:
 
 ```
 go install github.com/essentialkaos/jira-reindex-runner
