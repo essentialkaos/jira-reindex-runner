@@ -52,11 +52,11 @@
 
 Summary:         Application for periodical running Jira re-index process
 Name:            jira-reindex-runner
-Version:         0.0.3
+Version:         0.0.4
 Release:         0%{?dist}
 Group:           Applications/System
 License:         Apache License, Version 2.0
-URL:             https://github.com/essentialkaos/jira-reindex-runner
+URL:             https://kaos.sh/jira-reindex-runner
 
 Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
 
@@ -64,7 +64,7 @@ Source100:       checksum.sha512
 
 BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:   golang >= 1.16
+BuildRequires:   golang >= 1.17
 
 Provides:        %{name} = %{version}-%{release}
 
@@ -161,6 +161,11 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Wed Mar 30 2022 Anton Novojilov <andy@essentialkaos.com> - 0.0.4-0
+- Removed pkg.re usage
+- Added module info
+- Added Dependabot configuration
+
 * Thu Jul 29 2021 Anton Novojilov <andy@essentialkaos.com> - 0.0.3-0
 - Fixed bug with checking re-index progress
 
