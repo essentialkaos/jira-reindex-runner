@@ -82,10 +82,8 @@ Application for periodical running Jira re-index process.
 
 %build
 export GOPATH=$(pwd)
-export GO111MODULE=auto
-
 pushd %{srcdir}
-  %{__make} %{?_smp_mflags} all
+  go build -mod vendor %{name}.go
 popd
 
 %install
