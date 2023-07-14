@@ -35,7 +35,7 @@ import (
 // Basic application info
 const (
 	APP  = "JiraReindexRunner"
-	VER  = "0.0.3"
+	VER  = "0.0.5"
 	DESC = "Application for periodical running Jira re-index process"
 )
 
@@ -85,6 +85,8 @@ var useRawOutput = false
 
 // Init is main function
 func Init() {
+	preConfigureUI()
+
 	runtime.GOMAXPROCS(1)
 
 	_, errs := options.Parse(optMap)
@@ -97,24 +99,20 @@ func Init() {
 		os.Exit(1)
 	}
 
-	preConfigureUI()
-
-	if options.Has(OPT_COMPLETION) {
-		os.Exit(genCompletion())
-	}
-
-	if options.Has(OPT_GENERATE_MAN) {
-		os.Exit(genMan())
-	}
-
 	configureUI()
 
-	if options.GetB(OPT_VER) {
-		os.Exit(showAbout())
-	}
-
-	if options.GetB(OPT_HELP) {
-		os.Exit(showUsage())
+	switch {
+	case options.Has(OPT_COMPLETION):
+		os.Exit(printCompletion())
+	case options.Has(OPT_GENERATE_MAN):
+		printMan()
+		os.Exit(0)
+	case options.GetB(OPT_VER):
+		genAbout().Print(options.GetS(OPT_VER))
+		os.Exit(0)
+	case options.GetB(OPT_HELP):
+		genUsage().Print()
+		os.Exit(0)
 	}
 
 	loadConfig()
@@ -146,7 +144,10 @@ func preConfigureUI() {
 		}
 	}
 
-	if !fsutil.IsCharacterDevice("/dev/stdout") && os.Getenv("FAKETTY") == "" {
+	// Check for output redirect using pipes
+	if fsutil.IsCharacterDevice("/dev/stdin") &&
+		!fsutil.IsCharacterDevice("/dev/stdout") &&
+		os.Getenv("FAKETTY") == "" {
 		fmtc.DisableColors = true
 		useRawOutput = true
 	}
@@ -242,20 +243,8 @@ func printErrorAndExit(f string, a ...interface{}) {
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
-// showUsage prints usage info
-func showUsage() int {
-	genUsage().Render()
-	return 0
-}
-
-// showAbout prints info about version
-func showAbout() int {
-	genAbout().Render()
-	return 0
-}
-
-// genCompletion generates completion for different shells
-func genCompletion() int {
+// printCompletion prints completion for given shell
+func printCompletion() int {
 	info := genUsage()
 
 	switch options.GetS(OPT_COMPLETION) {
@@ -272,16 +261,14 @@ func genCompletion() int {
 	return 0
 }
 
-// genMan generates man page
-func genMan() int {
+// printMan prints man page
+func printMan() {
 	fmt.Println(
 		man.Generate(
 			genUsage(),
 			genAbout(),
 		),
 	)
-
-	return 0
 }
 
 // genUsage generates usage info
