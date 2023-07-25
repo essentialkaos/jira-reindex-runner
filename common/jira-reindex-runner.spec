@@ -56,7 +56,7 @@ install -dm 755 %{buildroot}%{_bindir}
 install -dm 755 %{buildroot}%{_sysconfdir}
 install -dm 755 %{buildroot}%{_sysconfdir}/cron.d
 install -dm 755 %{buildroot}%{_sysconfdir}/logrotate.d
-install -dm 755 %{buildroot}%{_logdir}/%{name}
+install -dm 755 %{buildroot}%{_localstatedir}/log/%{name}
 install -dm 755 %{buildroot}%{_mandir}/man1
 
 pushd %{name}
@@ -111,7 +111,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc LICENSE
-%dir %{_logdir}/%{name}
+%dir %{_localstatedir}/log/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}.knf
 %config(noreplace) %{_sysconfdir}/cron.d/%{name}
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
