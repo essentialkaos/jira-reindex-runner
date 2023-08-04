@@ -1,7 +1,7 @@
 module github.com/essentialkaos/jira-reindex-runner
 
-go 1.17
+go 1.19
 
-require github.com/essentialkaos/ek/v12 v12.43.0
+require github.com/essentialkaos/ek/v12 v12.75.1
 
-require golang.org/x/sys v0.0.0-20220319134239-a9b59b0215f8 // indirect
+require golang.org/x/sys v0.10.0 // indirect
