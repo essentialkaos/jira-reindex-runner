@@ -11,13 +11,14 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"strings"
 
 	"github.com/essentialkaos/ek/v12/fmtc"
-	"github.com/essentialkaos/ek/v12/fsutil"
 	"github.com/essentialkaos/ek/v12/knf"
 	"github.com/essentialkaos/ek/v12/log"
 	"github.com/essentialkaos/ek/v12/options"
+	"github.com/essentialkaos/ek/v12/support"
+	"github.com/essentialkaos/ek/v12/support/deps"
+	"github.com/essentialkaos/ek/v12/terminal/tty"
 	"github.com/essentialkaos/ek/v12/usage"
 	"github.com/essentialkaos/ek/v12/usage/completion/bash"
 	"github.com/essentialkaos/ek/v12/usage/completion/fish"
@@ -48,6 +49,7 @@ const (
 	OPT_HELP     = "h:help"
 	OPT_VER      = "v:version"
 
+	OPT_VERB_VER     = "vv:verbose-version"
 	OPT_COMPLETION   = "completion"
 	OPT_GENERATE_MAN = "generate-man"
 )
@@ -71,9 +73,10 @@ const (
 var optMap = options.Map{
 	OPT_CONFIG:   {Value: "/etc/jira-reindex-runner.knf"},
 	OPT_NO_COLOR: {Type: options.BOOL},
-	OPT_HELP:     {Type: options.BOOL, Alias: "u:usage"},
-	OPT_VER:      {Type: options.BOOL, Alias: "ver"},
+	OPT_HELP:     {Type: options.BOOL},
+	OPT_VER:      {Type: options.MIXED},
 
+	OPT_VERB_VER:     {Type: options.BOOL},
 	OPT_COMPLETION:   {},
 	OPT_GENERATE_MAN: {Type: options.BOOL},
 }
@@ -83,8 +86,8 @@ var useRawOutput = false
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 
-// Init is main function
-func Init() {
+// Run is main application function
+func Run(gitRev string, gomod []byte) {
 	preConfigureUI()
 
 	runtime.GOMAXPROCS(1)
@@ -108,7 +111,13 @@ func Init() {
 		printMan()
 		os.Exit(0)
 	case options.GetB(OPT_VER):
-		genAbout().Print(options.GetS(OPT_VER))
+		genAbout(gitRev).Print(options.GetS(OPT_VER))
+		os.Exit(0)
+	case options.GetB(OPT_VERB_VER):
+		support.Collect(APP, VER).
+			WithRevision(gitRev).
+			WithDeps(deps.Extract(gomod)).
+			Print()
 		os.Exit(0)
 	case options.GetB(OPT_HELP):
 		genUsage().Print()
@@ -123,7 +132,7 @@ func Init() {
 		os.Exit(0)
 	}
 
-	log.Aux(strings.Repeat("-", 80))
+	log.Divider()
 	log.Aux("%s %s starting…", APP, VER)
 
 	process()
@@ -131,28 +140,7 @@ func Init() {
 
 // preConfigureUI preconfigures UI based on information about user terminal
 func preConfigureUI() {
-	term := os.Getenv("TERM")
-
-	fmtc.DisableColors = true
-
-	if term != "" {
-		switch {
-		case strings.Contains(term, "xterm"),
-			strings.Contains(term, "color"),
-			term == "screen":
-			fmtc.DisableColors = false
-		}
-	}
-
-	// Check for output redirect using pipes
-	if fsutil.IsCharacterDevice("/dev/stdin") &&
-		!fsutil.IsCharacterDevice("/dev/stdout") &&
-		os.Getenv("FAKETTY") == "" {
-		fmtc.DisableColors = true
-		useRawOutput = true
-	}
-
-	if os.Getenv("NO_COLOR") != "" {
+	if !tty.IsTTY() {
 		fmtc.DisableColors = true
 	}
 }
@@ -249,11 +237,11 @@ func printCompletion() int {
 
 	switch options.GetS(OPT_COMPLETION) {
 	case "bash":
-		fmt.Printf(bash.Generate(info, "jira-reindex-runner"))
+		fmt.Print(bash.Generate(info, "jira-reindex-runner"))
 	case "fish":
-		fmt.Printf(fish.Generate(info, "jira-reindex-runner"))
+		fmt.Print(fish.Generate(info, "jira-reindex-runner"))
 	case "zsh":
-		fmt.Printf(zsh.Generate(info, optMap, "jira-reindex-runner"))
+		fmt.Print(zsh.Generate(info, optMap, "jira-reindex-runner"))
 	default:
 		return 1
 	}
@@ -266,7 +254,7 @@ func printMan() {
 	fmt.Println(
 		man.Generate(
 			genUsage(),
-			genAbout(),
+			genAbout(""),
 		),
 	)
 }
@@ -284,16 +272,25 @@ func genUsage() *usage.Info {
 }
 
 // genAbout generates info about version
-func genAbout() *usage.About {
-	return &usage.About{
-		App:           APP,
-		Version:       VER,
-		Desc:          DESC,
-		Year:          2009,
-		Owner:         "ESSENTIAL KAOS",
-		License:       "Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>",
-		UpdateChecker: usage.UpdateChecker{"essentialkaos/jira-reindex-runner", update.GitHubChecker},
+func genAbout(gitRev string) *usage.About {
+	about := &usage.About{
+		App:     APP,
+		Version: VER,
+		Desc:    DESC,
+		Year:    2009,
+		Owner:   "ESSENTIAL KAOS",
+		License: "Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>",
 	}
+
+	if gitRev != "" {
+		about.Build = "git:" + gitRev
+		about.UpdateChecker = usage.UpdateChecker{
+			"essentialkaos/jira-reindex-runner",
+			update.GitHubChecker,
+		}
+	}
+
+	return about
 }
 
 // ////////////////////////////////////////////////////////////////////////////////// //
