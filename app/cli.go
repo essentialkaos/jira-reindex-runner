@@ -35,9 +35,9 @@ import (
 
 // Basic application info
 const (
-	APP  = "JiraReindexRunner"
-	VER  = "0.0.5"
-	DESC = "Application for periodical running Jira re-index process"
+	APP  = "Jira Reindex Runner"
+	VER  = "0.0.6"
+	DESC = "Tool for periodical running Jira re-index process"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -216,11 +216,6 @@ func process() {
 // printError prints error message to console
 func printError(f string, a ...interface{}) {
 	fmtc.Fprintf(os.Stderr, "{r}"+f+"{!}\n", a...)
-}
-
-// printError prints warning message to console
-func printWarn(f string, a ...interface{}) {
-	fmtc.Fprintf(os.Stderr, "{y}"+f+"{!}\n", a...)
 }
 
 // printErrorAndExit print error message and exit with exit code 1
