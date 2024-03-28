@@ -10,7 +10,7 @@
 
 Summary:        Application for periodical running Jira re-index process
 Name:           jira-reindex-runner
-Version:        0.0.5
+Version:        0.0.6
 Release:        0%{?dist}
 Group:          Applications/System
 License:        Apache License, Version 2.0
@@ -22,7 +22,7 @@ Source100:      checksum.sha512
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  golang >= 1.19
+BuildRequires:  golang >= 1.20
 
 Provides:       %{name} = %{version}-%{release}
 
@@ -121,6 +121,11 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Thu Mar 28 2024 Anton Novojilov <andy@essentialkaos.com> - 0.0.6-0
+- Improved support information gathering
+- Code refactoring
+- Dependencies update
+
 * Fri Jul 14 2023 Anton Novojilov <andy@essentialkaos.com> - 0.0.5-0
 - Dependencies update
 
