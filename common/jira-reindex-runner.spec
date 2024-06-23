@@ -10,7 +10,7 @@
 
 Summary:        Application for periodical running Jira re-index process
 Name:           jira-reindex-runner
-Version:        0.0.6
+Version:        0.1.0
 Release:        0%{?dist}
 Group:          Applications/System
 License:        Apache License, Version 2.0
@@ -22,7 +22,7 @@ Source100:      checksum.sha512
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires:  golang >= 1.20
+BuildRequires:  golang >= 1.21
 
 Provides:       %{name} = %{version}-%{release}
 
@@ -37,13 +37,15 @@ Application for periodical running Jira re-index process.
 %{crc_check}
 
 %setup -q
-
-%build
 if [[ ! -d "%{name}/vendor" ]] ; then
-  echo "This package requires vendored dependencies"
+  echo -e "----\nThis package requires vendored dependencies\n----"
+  exit 1
+elif [[ -f "%{name}/%{name}" ]] ; then
+  echo -e "----\nSources must not contain precompiled binaries\n----"
   exit 1
 fi
 
+%build
 pushd %{name}
   go build %{name}.go
   cp LICENSE ..
@@ -121,6 +123,10 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Sun Jun 23 2024 Anton Novojilov <andy@essentialkaos.com> - 0.1.0-0
+- Code refactoring
+- Dependencies update
+
 * Thu Mar 28 2024 Anton Novojilov <andy@essentialkaos.com> - 0.0.6-0
 - Improved support information gathering
 - Code refactoring

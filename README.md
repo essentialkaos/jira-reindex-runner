@@ -1,14 +1,13 @@
-<p align="center"><a href="#readme"><img src="https://gh.kaos.st/jira-reindex-runner.svg"/></a></p>
+<p align="center"><a href="#readme"><img src=".github/images/card.svg"/></a></p>
 
 <p align="center">
-  <a href="https://kaos.sh/w/jira-reindex-runner/ci"><img src="https://kaos.sh/w/jira-reindex-runner/ci.svg" alt="GitHub Actions CI Status" /></a>
-  <a href="https://kaos.sh/r/jira-reindex-runner"><img src="https://kaos.sh/r/jira-reindex-runner.svg" alt="GoReportCard" /></a>
   <a href="https://kaos.sh/b/jira-reindex-runner"><img src="https://kaos.sh/b/6eb7ec23-d693-4d48-bec2-a50adc82b432.svg" alt="Codebeat badge" /></a>
+  <a href="https://kaos.sh/w/jira-reindex-runner/ci"><img src="https://kaos.sh/w/jira-reindex-runner/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/jira-reindex-runner/codeql"><img src="https://kaos.sh/w/jira-reindex-runner/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
-  <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
+  <a href="#license"><img src=".github/images/license.svg"/></a>
 </p>
 
-<p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#build-status">Build Status</a> • <a href="#contributing">Contributing</a> • <a href="#license">License</a></p>
+<p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#ci-status">CI Status</a> • <a href="#contributing">Contributing</a> • <a href="#license">License</a></p>
 
 <br/>
 
@@ -46,20 +45,20 @@ Using this endpoint, our app can check if re-index is required and run it.
 
 #### From source
 
-Make sure you have a working Go 1.19+ workspace ([instructions](https://go.dev/doc/install)), then:
+Make sure you have a working Go 1.21+ workspace ([instructions](https://go.dev/doc/install)), then:
 
 ```
-go install github.com/essentialkaos/jira-reindex-runner
+go install github.com/essentialkaos/jira-reindex-runner@latest
 ```
 
-#### From [ESSENTIAL KAOS Public Repository](https://pkgs.kaos.st)
+#### From [ESSENTIAL KAOS Public Repository](https://kaos.sh/kaos-repo)
 
 ```bash
-sudo yum install -y https://pkgs.kaos.st/kaos-repo-latest.el$(grep 'CPE_NAME' /etc/os-release | tr -d '"' | cut -d':' -f5).noarch.rpm
-sudo yum install jira-reindex-runner
+sudo dnf install -y https://pkgs.kaos.st/kaos-repo-latest.el$(grep 'CPE_NAME' /etc/os-release | tr -d '"' | cut -d':' -f5).noarch.rpm
+sudo dnf install jira-reindex-runner
 ```
 
-### Build Status
+### CI Status
 
 | Branch | Status |
 |--------|----------|
