@@ -18,6 +18,7 @@ import (
 	"github.com/essentialkaos/ek/v12/options"
 	"github.com/essentialkaos/ek/v12/support"
 	"github.com/essentialkaos/ek/v12/support/deps"
+	"github.com/essentialkaos/ek/v12/terminal"
 	"github.com/essentialkaos/ek/v12/terminal/tty"
 	"github.com/essentialkaos/ek/v12/usage"
 	"github.com/essentialkaos/ek/v12/usage/completion/bash"
@@ -36,7 +37,7 @@ import (
 // Basic application info
 const (
 	APP  = "Jira Reindex Runner"
-	VER  = "0.0.6"
+	VER  = "0.1.0"
 	DESC = "Tool for periodical running Jira re-index process"
 )
 
@@ -81,24 +82,19 @@ var optMap = options.Map{
 	OPT_GENERATE_MAN: {Type: options.BOOL},
 }
 
-// useRawOutput is raw output flag (for cli command)
-var useRawOutput = false
-
 // ////////////////////////////////////////////////////////////////////////////////// //
 
 // Run is main application function
 func Run(gitRev string, gomod []byte) {
 	preConfigureUI()
 
-	runtime.GOMAXPROCS(1)
+	runtime.GOMAXPROCS(2)
 
 	_, errs := options.Parse(optMap)
 
-	if len(errs) != 0 {
-		for _, err := range errs {
-			printError(err.Error())
-		}
-
+	if !errs.IsEmpty() {
+		terminal.Error("Options parsing errors:")
+		terminal.Error(errs.String())
 		os.Exit(1)
 	}
 
@@ -183,10 +179,10 @@ func validateConfig() {
 	})
 
 	if len(errs) != 0 {
-		printError("Error while configuration file validation:")
+		terminal.Error("Error while configuration file validation:")
 
 		for _, err := range errs {
-			printError("  %v", err)
+			terminal.Error("  %v", err)
 		}
 
 		os.Exit(1)
@@ -195,7 +191,7 @@ func validateConfig() {
 
 // setupLogger configures logger subsystems
 func setupLogger() {
-	err := log.Set(knf.GetS(LOG_FILE), knf.GetM(LOG_PERMS, 644))
+	err := log.Set(knf.GetS(LOG_FILE), knf.GetM(LOG_PERMS, 0644))
 
 	if err != nil {
 		printErrorAndExit(err.Error())
@@ -213,14 +209,9 @@ func process() {
 	os.Exit(runReindex())
 }
 
-// printError prints error message to console
-func printError(f string, a ...interface{}) {
-	fmtc.Fprintf(os.Stderr, "{r}"+f+"{!}\n", a...)
-}
-
 // printErrorAndExit print error message and exit with exit code 1
 func printErrorAndExit(f string, a ...interface{}) {
-	printError(f, a...)
+	terminal.Error(f, a...)
 	os.Exit(1)
 }
 
