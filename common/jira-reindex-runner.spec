@@ -37,8 +37,6 @@ Application for periodical running Jira re-index process.
 %{crc_check}
 
 %setup -q
-
-%build
 if [[ ! -d "%{name}/vendor" ]] ; then
   echo -e "----\nThis package requires vendored dependencies\n----"
   exit 1
@@ -47,6 +45,7 @@ elif [[ -f "%{name}/%{name}" ]] ; then
   exit 1
 fi
 
+%build
 pushd %{name}
   go build %{name}.go
   cp LICENSE ..
