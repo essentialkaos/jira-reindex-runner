@@ -1,7 +1,6 @@
 <p align="center"><a href="#readme"><img src=".github/images/card.svg"/></a></p>
 
 <p align="center">
-  <a href="https://kaos.sh/b/jira-reindex-runner"><img src="https://kaos.sh/b/6eb7ec23-d693-4d48-bec2-a50adc82b432.svg" alt="Codebeat badge" /></a>
   <a href="https://kaos.sh/w/jira-reindex-runner/ci"><img src="https://kaos.sh/w/jira-reindex-runner/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/jira-reindex-runner/codeql"><img src="https://kaos.sh/w/jira-reindex-runner/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
   <a href="#license"><img src=".github/images/license.svg"/></a>
