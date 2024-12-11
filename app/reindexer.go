@@ -194,12 +194,9 @@ func getCurrentReindexProgress() (*ReindexProgressInfo, error) {
 // sendRequest sends request to JIRA
 func sendRequest(endpoint, method string, query req.Query, result interface{}) (int, error) {
 	r := req.Request{
-		Method: method,
-		URL:    knf.GetS(JIRA_URL) + endpoint,
-
-		BasicAuthUsername: knf.GetS(JIRA_USERNAME),
-		BasicAuthPassword: knf.GetS(JIRA_PASSWORD),
-
+		Method:      method,
+		URL:         knf.GetS(JIRA_URL) + endpoint,
+		Auth:        req.AuthBasic{knf.GetS(JIRA_USERNAME), knf.GetS(JIRA_PASSWORD)},
 		AutoDiscard: true,
 	}
 
