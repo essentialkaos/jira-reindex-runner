@@ -1,7 +1,6 @@
 <p align="center"><a href="#readme"><img src=".github/images/card.svg"/></a></p>
 
 <p align="center">
-  <a href="https://kaos.sh/b/jira-reindex-runner"><img src="https://kaos.sh/b/6eb7ec23-d693-4d48-bec2-a50adc82b432.svg" alt="Codebeat badge" /></a>
   <a href="https://kaos.sh/w/jira-reindex-runner/ci"><img src="https://kaos.sh/w/jira-reindex-runner/ci.svg" alt="GitHub Actions CI Status" /></a>
   <a href="https://kaos.sh/w/jira-reindex-runner/codeql"><img src="https://kaos.sh/w/jira-reindex-runner/codeql.svg" alt="GitHub Actions CodeQL Status" /></a>
   <a href="#license"><img src=".github/images/license.svg"/></a>
@@ -45,7 +44,7 @@ Using this endpoint, our app can check if re-index is required and run it.
 
 #### From source
 
-Make sure you have a working Go 1.21+ workspace ([instructions](https://go.dev/doc/install)), then:
+Make sure you have a working [Go 1.23+](https://github.com/essentialkaos/.github/blob/master/GO-VERSION-SUPPORT.md) workspace ([instructions](https://go.dev/doc/install)), then:
 
 ```
 go install github.com/essentialkaos/jira-reindex-runner@latest
@@ -67,10 +66,10 @@ sudo dnf install jira-reindex-runner
 
 ### Contributing
 
-Before contributing to this project please read our [Contributing Guidelines](https://github.com/essentialkaos/contributing-guidelines#contributing-guidelines).
+Before contributing to this project please read our [Contributing Guidelines](https://github.com/essentialkaos/.github/blob/master/CONTRIBUTING.md).
 
 ### License
 
 [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
-<p align="center"><a href="https://essentialkaos.com"><img src="https://gh.kaos.st/ekgh.svg"/></a></p>
+<p align="center"><a href="https://kaos.dev"><img src="https://raw.githubusercontent.com/essentialkaos/.github/refs/heads/master/images/ekgh.svg"/></a></p>

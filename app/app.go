@@ -2,7 +2,7 @@ package app
 
 // ////////////////////////////////////////////////////////////////////////////////// //
 //                                                                                    //
-//                         Copyright (c) 2024 ESSENTIAL KAOS                          //
+//                         Copyright (c) 2025 ESSENTIAL KAOS                          //
 //      Apache License, Version 2.0 <https://www.apache.org/licenses/LICENSE-2.0>     //
 //                                                                                    //
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -12,24 +12,24 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/essentialkaos/ek/v12/fmtc"
-	"github.com/essentialkaos/ek/v12/knf"
-	"github.com/essentialkaos/ek/v12/log"
-	"github.com/essentialkaos/ek/v12/options"
-	"github.com/essentialkaos/ek/v12/support"
-	"github.com/essentialkaos/ek/v12/support/deps"
-	"github.com/essentialkaos/ek/v12/terminal"
-	"github.com/essentialkaos/ek/v12/terminal/tty"
-	"github.com/essentialkaos/ek/v12/usage"
-	"github.com/essentialkaos/ek/v12/usage/completion/bash"
-	"github.com/essentialkaos/ek/v12/usage/completion/fish"
-	"github.com/essentialkaos/ek/v12/usage/completion/zsh"
-	"github.com/essentialkaos/ek/v12/usage/man"
-	"github.com/essentialkaos/ek/v12/usage/update"
+	"github.com/essentialkaos/ek/v13/fmtc"
+	"github.com/essentialkaos/ek/v13/knf"
+	"github.com/essentialkaos/ek/v13/log"
+	"github.com/essentialkaos/ek/v13/options"
+	"github.com/essentialkaos/ek/v13/support"
+	"github.com/essentialkaos/ek/v13/support/deps"
+	"github.com/essentialkaos/ek/v13/terminal"
+	"github.com/essentialkaos/ek/v13/terminal/tty"
+	"github.com/essentialkaos/ek/v13/usage"
+	"github.com/essentialkaos/ek/v13/usage/completion/bash"
+	"github.com/essentialkaos/ek/v13/usage/completion/fish"
+	"github.com/essentialkaos/ek/v13/usage/completion/zsh"
+	"github.com/essentialkaos/ek/v13/usage/man"
+	"github.com/essentialkaos/ek/v13/usage/update"
 
-	knfv "github.com/essentialkaos/ek/v12/knf/validators"
-	knff "github.com/essentialkaos/ek/v12/knf/validators/fs"
-	knfn "github.com/essentialkaos/ek/v12/knf/validators/network"
+	knfv "github.com/essentialkaos/ek/v13/knf/validators"
+	knff "github.com/essentialkaos/ek/v13/knf/validators/fs"
+	knfn "github.com/essentialkaos/ek/v13/knf/validators/network"
 )
 
 // ////////////////////////////////////////////////////////////////////////////////// //
@@ -37,7 +37,7 @@ import (
 // Basic application info
 const (
 	APP  = "Jira Reindex Runner"
-	VER  = "0.1.0"
+	VER  = "0.1.1"
 	DESC = "Tool for periodical running Jira re-index process"
 )
 
@@ -94,7 +94,7 @@ func Run(gitRev string, gomod []byte) {
 
 	if !errs.IsEmpty() {
 		terminal.Error("Options parsing errors:")
-		terminal.Error(errs.String())
+		terminal.Error(errs.Error(" - "))
 		os.Exit(1)
 	}
 
@@ -160,30 +160,24 @@ func loadConfig() {
 // validateConfig validates configuration file values
 func validateConfig() {
 	errs := knf.Validate([]*knf.Validator{
-		{JIRA_URL, knfv.Empty, nil},
-		{JIRA_USERNAME, knfv.Empty, nil},
-		{JIRA_PASSWORD, knfv.Empty, nil},
+		{JIRA_URL, knfv.Set, nil},
+		{JIRA_USERNAME, knfv.Set, nil},
+		{JIRA_PASSWORD, knfv.Set, nil},
 
 		{JIRA_URL, knfn.URL, nil},
 
-		{JIRA_REINDEX_TYPE, knfv.NotContains, []string{
+		{JIRA_REINDEX_TYPE, knfv.SetToAny, []string{
 			"", "FOREGROUND", "BACKGROUND", "BACKGROUND_PREFERRED",
 		}},
 
-		{LOG_DIR, knff.Perms, "DW"},
-		{LOG_DIR, knff.Perms, "DX"},
+		{LOG_DIR, knff.Perms, "DWX"},
 
-		{LOG_LEVEL, knfv.NotContains, []string{
-			"debug", "info", "warn", "error", "crit",
-		}},
+		{LOG_LEVEL, knfv.SetToAnyIgnoreCase, log.Levels()},
 	})
 
-	if len(errs) != 0 {
+	if !errs.IsEmpty() {
 		terminal.Error("Error while configuration file validation:")
-
-		for _, err := range errs {
-			terminal.Error("  %v", err)
-		}
+		terminal.Error(errs.Error(" - "))
 
 		os.Exit(1)
 	}
