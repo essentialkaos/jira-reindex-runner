@@ -121,7 +121,7 @@ func checkReindexProgress() (bool, error) {
 		return false, err
 	}
 
-	return i.IsFinished == false, err
+	return !i.IsFinished, err
 }
 
 // startReindex starts and monitors re-index process
